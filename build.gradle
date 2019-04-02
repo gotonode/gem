@@ -1,0 +1,43 @@
+plugins {
+    id 'org.springframework.boot' version '2.2.0.M1'
+    id 'java'
+}
+
+apply plugin: 'io.spring.dependency-management'
+
+project.ext {
+    junitVersion = '4.12'
+}
+
+group = 'io.github.gotonode'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+    mavenCentral()
+    jcenter()
+    maven { url 'https://repo.spring.io/snapshot' }
+    maven { url 'https://repo.spring.io/milestone' }
+}
+
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+	
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: '2.1.3.RELEASE'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.1.3.RELEASE'
+
+    compile group: 'com.h2database', name: 'h2', version: '1.4.199'
+
+    compileOnly 'org.projectlombok:lombok:1.18.6'
+    annotationProcessor 'org.projectlombok:lombok:1.18.6'
+	
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
+}
