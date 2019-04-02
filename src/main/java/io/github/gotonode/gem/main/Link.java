@@ -1,4 +1,4 @@
-package io.github.gotonode.gem.domain;
+package io.github.gotonode.gem.main;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,21 +11,21 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Data
 @Entity
-public class SampleItem implements Serializable {
+public class Link implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private long id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "uri")
+    private String uri;
 
     @Override
     public String toString() {
-        return "SampleItem{" +
+        return "Link{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", uri=" + uri +
                 '}';
     }
 }
