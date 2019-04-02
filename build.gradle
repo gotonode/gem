@@ -40,4 +40,6 @@ dependencies {
 	
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     developmentOnly("org.springframework.boot:spring-boot-devtools")
+	
+	compile group: 'postgresql', name: 'postgresql', version: '9.0-801.jdbc4'
 }
