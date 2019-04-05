@@ -19,13 +19,7 @@ public class DebugService {
     private Random random = new Random();
 
     public Link generate() {
-
-        Link link = new Link();
-
-        link.setUri("http://www." + UUID.randomUUID().toString() + ".com/");
-        link.setDate(Date.from(Instant.now()));
-
-        return linkRepository.save(link);
+        return generate(1).get(0);
     }
 
     public List<Link> generate(int count) {
@@ -45,10 +39,6 @@ public class DebugService {
         return links;
     }
 
-    public long getCount() {
-        return linkRepository.count();
-    }
-
     public void delete(long id) {
         linkRepository.deleteById(id);
     }
@@ -57,7 +47,7 @@ public class DebugService {
         linkRepository.deleteAll();
     }
 
-    public void toggle(long id) {
+    public Link toggle(long id) {
         Link link = linkRepository.getOne(id);
 
         boolean used = link.isUsed();
@@ -65,7 +55,7 @@ public class DebugService {
 
         link.setUsed(used);
 
-        linkRepository.save(link);
+        return linkRepository.save(link);
     }
 
     public Link random() {
@@ -89,11 +79,7 @@ public class DebugService {
      * @return The next link from the database.
      */
     public Link fetchDebug() {
-        Link link = linkRepository.findFirstByOrderByIdAsc();
-
-        if (link == null) {
-            return null;
-        }
+        Link link = linkRepository.findFirstByUsedOrderByIdAsc(false);
 
         return link;
     }
