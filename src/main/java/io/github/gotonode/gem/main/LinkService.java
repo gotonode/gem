@@ -19,7 +19,7 @@ public class LinkService {
 
     public Link fetch() {
 
-        Link link = linkRepository.findFirstByOrderByIdAsc();
+        Link link = linkRepository.findFirstByUsedOrderByIdAsc(false);
 
         if (link == null) {
             return null;

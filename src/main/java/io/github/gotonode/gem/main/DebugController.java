@@ -82,10 +82,13 @@ public class DebugController {
     }
 
     @GetMapping("/reset")
-    public String reset(@RequestParam String key) {
+    public String reset(@RequestParam(required = false) String key) {
 
-        if (!key.equals("GEMKEY")) {
-            return "";
+        if (System.getenv().containsKey("HEROKU")) {
+            if (!System.getenv().get("GEMKEY").equals(key.trim())) {
+                System.out.println("Invalid key. Will not perform delete operation.");
+                return "";
+            }
         }
 
         debugService.reset();
