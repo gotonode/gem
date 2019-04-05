@@ -5,6 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
@@ -72,6 +75,13 @@ public class LinkService {
         if (uri.length() == 0) {
             System.out.println("Link was not added because it was just an empty string.");
             return "{\"error\":\"The link was empty.\"}";
+        }
+
+        try {
+            uri = URLDecoder.decode(uri, StandardCharsets.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            // Actually should never happen. Really.
+            e.printStackTrace();
         }
 
         Link link = new Link();
