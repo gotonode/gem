@@ -1,7 +1,5 @@
 package io.github.gotonode.gem.main;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,9 +8,7 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class LinkService {
@@ -38,7 +34,7 @@ public class LinkService {
         return linkRepository.findAll();
     }
 
-    private void checkForSpace() {
+    private void ensureCompliance() {
 
         long count = linkRepository.count();
 
@@ -64,45 +60,34 @@ public class LinkService {
         System.out.println("Database is in compliance again (" + count + " entries), ready to accept new links.");
     }
 
-    public String add(String uri) {
+    public Link add(String uri) {
 
-        checkForSpace();
+        ensureCompliance();
 
         uri = uri.replace("uri=", "");
 
         uri = uri.trim();
 
         if (uri.length() == 0) {
-            System.out.println("Link was not added because it was just an empty string.");
-            return "{\"error\":\"The link was empty.\"}";
+            return null;
         }
 
         try {
             uri = URLDecoder.decode(uri, StandardCharsets.UTF_8.name());
+
         } catch (UnsupportedEncodingException e) {
             // Actually should never happen. Really.
             e.printStackTrace();
+
+            return null;
         }
 
         Link link = new Link();
+
         link.setUri(uri);
         link.setUsed(false);
         link.setDate(Date.from(Instant.now()));
 
-        Link savedLink = linkRepository.save(link);
-
-        Map<Long, String> map = new HashMap<>();
-        map.put(savedLink.getId(), savedLink.getUri());
-
-        ObjectMapper om = new ObjectMapper();
-        String json = "";
-
-        try {
-            json = om.writeValueAsString(map);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-
-        return json;
+        return linkRepository.save(link);
     }
 }

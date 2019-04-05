@@ -68,7 +68,9 @@ public class DebugController {
     @GetMapping("/toggle/{id}")
     public String toggle(@PathVariable long id) {
 
-        debugService.toggle(id);
+        Link link = debugService.toggle(id);
+
+        System.out.println("Toggled the used-state of: " + link);
 
         return "redirect:/";
     }
@@ -77,6 +79,8 @@ public class DebugController {
     public String delete(@PathVariable long id) {
 
         debugService.delete(id);
+
+        System.out.println("Deleted the link with ID " + id + ".");
 
         return "redirect:/";
     }

@@ -1,5 +1,7 @@
 package io.github.gotonode.gem.main;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -9,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 public class LinkController {
@@ -50,10 +54,32 @@ public class LinkController {
 
         System.out.println("Got a POST request to add a link: " + uri);
 
-        String json = linkService.add(uri);
+        Link link = linkService.add(uri);
+
+        if (link == null) {
+            System.out.println("Link was not added because it was just an empty string.");
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .body("{\"error\":\"The link was empty.\"}");
+        }
+
+        Map<Long, String> map = new HashMap<>();
+        map.put(link.getId(), link.getUri());
+
+        ObjectMapper om = new ObjectMapper();
+        String json = "";
+
+        try {
+            json = om.writeValueAsString(map);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
 
         System.out.println("Added a new link: " + json);
 
-        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON_UTF8).body(json);
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .body(json);
     }
 }

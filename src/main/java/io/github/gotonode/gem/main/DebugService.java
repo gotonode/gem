@@ -79,8 +79,6 @@ public class DebugService {
      * @return The next link from the database.
      */
     public Link fetchDebug() {
-        Link link = linkRepository.findFirstByUsedOrderByIdAsc(false);
-
-        return link;
+        return linkRepository.findFirstByUsedOrderByIdAsc(false);
     }
 }
