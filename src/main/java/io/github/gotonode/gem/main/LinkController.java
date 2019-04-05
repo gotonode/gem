@@ -42,7 +42,7 @@ public class LinkController {
 
         if (link == null) {
             response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-            response.setHeader("Location", "https://gem.herokuapp.com/done");
+            response.setHeader("Location", "/done");
             response.setHeader("Connection", "close");
 
             return;
