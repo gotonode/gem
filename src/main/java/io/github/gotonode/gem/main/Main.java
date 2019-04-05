@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class Main {
 
-    public static final int MAX_DATABASE_ENTRIES = 10; // Limitation imposed by free Heroku dyno.
+    public static final int MAX_DATABASE_ENTRIES = 10_000; // Limitation imposed by free Heroku dyno.
 
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
