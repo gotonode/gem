@@ -2,6 +2,7 @@ package io.github.gotonode.gem.main;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 
 @Controller
-public class MainController {
+public class LinkController {
 
     @Autowired
     private LinkService linkService;
@@ -22,17 +23,14 @@ public class MainController {
     }
 
     @GetMapping("/fetch")
-    public void fetch(@RequestParam String key, HttpServletResponse response) {
+    public void fetch(@RequestParam(required = false) String key, HttpServletResponse response) {
 
-//        if (System.getenv().get("GEMKEY") == null) {
-//            System.out.println("Environment variable not found on system.");
-//            return;
-//        }
-//
-//        if (!System.getenv().get("GEMKEY").equals(key.trim())) {
-//            System.out.println("Incorrect key used. Aborting operation.");
-//            return;
-//        }
+        if (System.getenv().containsKey("HEROKU")) {
+            if (!System.getenv().get("GEMKEY").equals(key.trim())) {
+                System.out.println("Incorrect key used. Aborting operation.");
+                return;
+            }
+        }
 
         System.out.println("Fetching a new link (correct key)");
 
@@ -52,16 +50,10 @@ public class MainController {
 
         System.out.println("Got a POST request to add a link: " + uri);
 
-        String output = linkService.add(uri);
+        String json = linkService.add(uri);
 
-        if (output == null) {
-            System.out.println("Link was not added. Probably it was an empty string?");
+        System.out.println("Added a new link: " + json);
 
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("");
-        }
-
-        System.out.println("Added a new (formatted) link: " + output);
-
-        return ResponseEntity.status(HttpStatus.OK).body(uri);
+        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON_UTF8).body(json);
     }
 }

@@ -19,7 +19,7 @@ public class Link implements Serializable {
     @Column(name = "id", unique = true, nullable = false)
     private long id;
 
-    @Column(name = "uri", unique = true, nullable = false)
+    @Column(name = "uri", nullable = false)
     private String uri;
 
     @Column(name = "used", nullable = false)

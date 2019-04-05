@@ -71,7 +71,7 @@ public class DebugService {
      * @return The next link from the database.
      */
     public Link fetchDebug() {
-        Link link = linkRepository.findOneByOrderByIdAsc();
+        Link link = linkRepository.findFirstByOrderByIdAsc();
 
         if (link == null) {
             return null;
