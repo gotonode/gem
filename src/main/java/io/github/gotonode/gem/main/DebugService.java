@@ -15,6 +15,8 @@ public class DebugService {
     @Autowired
     private LinkRepository linkRepository;
 
+    private Random random = new Random();
+
     public void generate(int count) {
 
         for (int i = 0; i < count; i++) {
@@ -34,6 +36,10 @@ public class DebugService {
         linkRepository.deleteById(id);
     }
 
+    public void reset() {
+        linkRepository.deleteAll();
+    }
+
     public void toggle(long id) {
         Link link = linkRepository.getOne(id);
 
@@ -48,14 +54,29 @@ public class DebugService {
     public Link random() {
 
         List<Link> links = linkRepository.findAll();
-        Random random = new Random();
 
         if (links.size() == 1) {
             return links.get(0);
+        } else if (links.size() == 0) {
+            return null;
         }
 
-        long id = random.nextInt(links.size() - 1) + 1;
+        long id = random.nextInt(links.size());
 
         return links.get((int) id);
+    }
+
+    /**
+     * Fetches the next item but does NOT mark it as used.
+     * @return The next link from the database.
+     */
+    public Link fetchDebug() {
+        Link link = linkRepository.findOneByOrderByIdAsc();
+
+        if (link == null) {
+            return null;
+        }
+
+        return link;
     }
 }

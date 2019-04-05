@@ -43,6 +43,15 @@
                     <a class="dropdown-item" href="/generate/1000">Generate 1000</a>
                 </div>
             </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    Tools
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
+                    <a class="dropdown-item" style="color: red;" href="/reset?key=ENTER_KEY_HERE">Clear (delete everything)</a>
+                </div>
+            </li>
         </ul>
         <form class="form-inline my-2 my-lg-0" th:action="@{/add}" method="POST"
               enctype="application/x-www-form-urlencoded">

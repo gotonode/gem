@@ -33,6 +33,10 @@ public class LinkService {
 
         uri = uri.trim();
 
+        if (uri.length() == 0) {
+            return null;
+        }
+
         Link link = new Link();
         link.setUri(uri);
         link.setUsed(false);

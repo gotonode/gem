@@ -24,15 +24,15 @@ public class MainController {
     @GetMapping("/fetch")
     public void fetch(@RequestParam String key, HttpServletResponse response) {
 
-        if (System.getenv().get("GEMKEY") == null) {
-            System.out.println("Environment variable not found on system.");
-            return;
-        }
-
-        if (!System.getenv().get("GEMKEY").equals(key.trim())) {
-            System.out.println("Incorrect key used. Aborting operation.");
-            return;
-        }
+//        if (System.getenv().get("GEMKEY") == null) {
+//            System.out.println("Environment variable not found on system.");
+//            return;
+//        }
+//
+//        if (!System.getenv().get("GEMKEY").equals(key.trim())) {
+//            System.out.println("Incorrect key used. Aborting operation.");
+//            return;
+//        }
 
         System.out.println("Fetching a new link (correct key)");
 
@@ -40,7 +40,7 @@ public class MainController {
 
         String uri = link.getUri();
 
-        System.out.println("Returning link: " + uri);
+        System.out.println("Returning link: " + link);
 
         response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
         response.setHeader("Location", uri);
@@ -54,8 +54,14 @@ public class MainController {
 
         String output = linkService.add(uri);
 
-        System.out.println("Adding new link: " + output);
+        if (output == null) {
+            System.out.println("Link was not added. Probably it was an empty string?");
 
-        return ResponseEntity.status(HttpStatus.OK).body("OK");
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("");
+        }
+
+        System.out.println("Added a new (formatted) link: " + output);
+
+        return ResponseEntity.status(HttpStatus.OK).body(uri);
     }
 }

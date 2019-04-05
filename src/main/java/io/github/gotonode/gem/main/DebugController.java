@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -51,10 +52,29 @@ public class DebugController {
         return "redirect:/";
     }
 
+    @GetMapping("/reset")
+    public String reset(@RequestParam String key) {
+
+        if (!key.equals("GEMKEY")) {
+            return "";
+        }
+
+        debugService.reset();
+
+        return "redirect:/";
+    }
+
     @GetMapping("/random")
     public void random(HttpServletResponse response) {
 
         Link link = debugService.random();
+
+        if (link == null) {
+            response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+            response.setHeader("Location", "/");
+            response.setHeader("Connection", "close");
+            return;
+        }
 
         String uri = link.getUri();
 
@@ -62,4 +82,17 @@ public class DebugController {
         response.setHeader("Location", uri);
         response.setHeader("Connection", "close");
     }
+
+    @GetMapping("/fetchDebug")
+    public void fetchDebug(HttpServletResponse response) {
+
+        Link link = debugService.fetchDebug();
+
+        String uri = link.getUri();
+
+        response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+        response.setHeader("Location", uri);
+        response.setHeader("Connection", "close");
+    }
+
 }

@@ -34,6 +34,7 @@ public class Link implements Serializable {
                 "id=" + id +
                 ", uri='" + uri + '\'' +
                 ", used=" + used +
+                ", date=" + date +
                 '}';
     }
 }
