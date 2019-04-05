@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -17,15 +18,31 @@ public class DebugService {
 
     private Random random = new Random();
 
-    public void generate(int count) {
+    public Link generate() {
+
+        Link link = new Link();
+
+        link.setUri("http://www." + UUID.randomUUID().toString() + ".com/");
+        link.setDate(Date.from(Instant.now()));
+
+        return linkRepository.save(link);
+    }
+
+    public List<Link> generate(int count) {
+
+        List<Link> links = new ArrayList<>();
 
         for (int i = 0; i < count; i++) {
 
             Link link = new Link();
+
             link.setUri("http://www." + UUID.randomUUID().toString() + ".com/");
             link.setDate(Date.from(Instant.now()));
-            linkRepository.save(link);
+
+            links.add(linkRepository.save(link));
         }
+
+        return links;
     }
 
     public long getCount() {
@@ -68,6 +85,7 @@ public class DebugService {
 
     /**
      * Fetches the next item but does NOT mark it as used.
+     *
      * @return The next link from the database.
      */
     public Link fetchDebug() {

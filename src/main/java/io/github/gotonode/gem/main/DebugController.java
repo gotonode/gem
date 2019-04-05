@@ -1,7 +1,10 @@
 package io.github.gotonode.gem.main;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +12,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 public class DebugController {
@@ -19,21 +25,44 @@ public class DebugController {
     @GetMapping("/generate")
     public ResponseEntity generate() {
 
-        debugService.generate(1);
+        Link link = debugService.generate();
 
-        long count = debugService.getCount();
+        Map<Long, String> map = new HashMap<>();
+        map.put(link.getId(), link.getUri());
 
-        return ResponseEntity.status(HttpStatus.OK).body(count);
+        ObjectMapper om = new ObjectMapper();
+        String json = "";
+
+        try {
+            json = om.writeValueAsString(map);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON_UTF8).body(json);
     }
 
     @GetMapping("/generate/{num}")
     public ResponseEntity generateMany(@PathVariable int num) {
 
-        debugService.generate(num);
+        List<Link> links = debugService.generate(num);
 
-        long count = debugService.getCount();
+        Map<Long, String> map = new HashMap<>();
 
-        return ResponseEntity.status(HttpStatus.OK).body(count);
+        for (Link link : links) {
+            map.put(link.getId(), link.getUri());
+        }
+
+        ObjectMapper om = new ObjectMapper();
+        String json = "";
+
+        try {
+            json = om.writeValueAsString(map);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON_UTF8).body(json);
     }
 
     @GetMapping("/toggle/{id}")

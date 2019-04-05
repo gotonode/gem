@@ -39,6 +39,12 @@ public class LinkService {
 
         long count = linkRepository.count();
 
+        if (count < Main.MAX_DATABASE_ENTRIES) {
+
+            // There's still room left in the database.
+            return;
+        }
+
         System.out.println("Database is full (" + count + " entries). Removing oldest entries.");
 
         while (count >= Main.MAX_DATABASE_ENTRIES) {
