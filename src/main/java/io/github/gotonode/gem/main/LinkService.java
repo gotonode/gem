@@ -31,7 +31,7 @@ public class LinkService {
     }
 
     public List<Link> findAll() {
-        return linkRepository.findAll();
+        return linkRepository.findAllByOrderByIdAsc();
     }
 
     private void ensureCompliance() {
