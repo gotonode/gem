@@ -11,9 +11,9 @@ public class SpringConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-
-        registry
-                .addResourceHandler("/public/**")
-                .addResourceLocations("/public/");
+        if (!registry.hasMappingForPattern("/public/**")) {
+            registry.addResourceHandler("/public/**").addResourceLocations(
+                    "classpath:/META-INF/resources/public/");
+        }
     }
 }

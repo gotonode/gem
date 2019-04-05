@@ -131,6 +131,14 @@ public class DebugController {
 
         Link link = debugService.fetchDebug();
 
+        if (link == null) {
+            response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+            response.setHeader("Location", "/done");
+            response.setHeader("Connection", "close");
+
+            return;
+        }
+
         String uri = link.getUri();
 
         response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
