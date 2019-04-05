@@ -1,49 +1,61 @@
 package io.github.gotonode.gem.main;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URISyntaxException;
-
-import java.util.UUID;
+import javax.servlet.http.HttpServletResponse;
 
 @Controller
 public class MainController {
 
     @Autowired
-    private LinkRepository sampleRepository;
+    private LinkService linkService;
 
     @GetMapping("/")
-    public String index(Model model) throws URISyntaxException {
-        Link link = new Link();
-        link.setUri("http://www." + UUID.randomUUID().toString() + ".com/");
-
-        sampleRepository.save(link);
+    public String index(Model model) {
+        model.addAttribute("links", linkService.findAll());
         return "index";
     }
 
     @GetMapping("/fetch")
-    public String fetch(@RequestParam String key, Model model) {
-        System.out.println(key);
+    public void fetch(@RequestParam String key, HttpServletResponse response) {
 
-        // TODO: Ineffective!
-        Link link = sampleRepository.findAll().get(0);
-        sampleRepository.delete(link);
-        model.addAttribute("link", link.getUri());
+        if (System.getenv().get("GEMKEY") == null) {
+            System.out.println("Environment variable not found on system.");
+            return;
+        }
 
-        return "redirect: " + link.getUri();
+        if (!System.getenv().get("GEMKEY").equals(key.trim())) {
+            System.out.println("Incorrect key used. Aborting operation.");
+            return;
+        }
+
+        System.out.println("Fetching a new link (correct key)");
+
+        Link link = linkService.fetch();
+
+        String uri = link.getUri();
+
+        System.out.println("Returning link: " + uri);
+
+        response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+        response.setHeader("Location", uri);
+        response.setHeader("Connection", "close");
     }
 
     @PostMapping("/add")
-    public String add(@RequestParam String uri) throws URISyntaxException {
+    public ResponseEntity add(@RequestBody String uri) {
 
-        Link link = new Link();
-        link.setUri(uri);
+        System.out.println("Got a POST request to add a link: " + uri);
 
-        sampleRepository.save(link);
+        String output = linkService.add(uri);
 
-        return "redirect:/";
+        System.out.println("Adding new link: " + output);
+
+        return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
 }

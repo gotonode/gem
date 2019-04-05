@@ -1,12 +1,94 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 
 <head>
     <title>gem.herokuapp.com</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- Bootstrap CSS -->
 </head>
 
 <body>
-<p>This site is under construction.</p>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Gem</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/random">Fetch random</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    Generate
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/generate/1">Generate 1</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/generate/5">Generate 5</a>
+                    <a class="dropdown-item" href="/generate/10">Generate 10</a>
+                    <a class="dropdown-item" href="/generate/25">Generate 25</a>
+                    <a class="dropdown-item" href="/generate/100">Generate 100</a>
+                    <a class="dropdown-item" href="/generate/1000">Generate 1000</a>
+                </div>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0" th:action="@{/add}" method="POST"
+              enctype="application/x-www-form-urlencoded">
+            <input class="form-control mr-sm-2" name="uri" type="text" placeholder="Add a link" aria-label="Add a link">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Add</button>
+        </form>
+    </div>
+</nav>
+
+<h1>Control Panel</h1>
+
+
+<table class="table">
+    <thead>
+    <th scope="col">ID</th>
+    <th scope="col">URL</th>
+    <th scope="col">Added</th>
+    <th scope="col">Used</th>
+    <th scope="col">Toggle Used</th>
+    <th scope="col">Delete</th>
+    </thead>
+    <tbody>
+
+    <tr th:each="link : ${links}" class="entry">
+        <th scope="row"><span th:text="${link.id}">link.id</span></th>
+        <td><a th:href="${link.uri}"><span th:text="${link.uri}">link.uri</span></a></td>
+        <td><span th:text="${link.date}">link.date</span></td>
+        <td><span th:text="${link.used}">link.used</span></td>
+        <td><a th:href="'/toggle/' + ${link.id}" class="btn btn-info">Toggle</a></td>
+        <td><a th:href="'/delete/' + ${link.id}" class="btn btn-danger">Delete</a></td>
+    </tr>
+    </tbody>
+</table>
+
+<!-- Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+<!-- Bootstrap JS -->
+
 </body>
 
 </html>
