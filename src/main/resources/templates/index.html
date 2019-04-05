@@ -13,6 +13,21 @@
 
 <body>
 
+<style>
+    tr.used {
+        background-color: #e4f2fe;
+    }
+    tr.unused {
+        background-color: #f6f8fb;
+    }
+
+    table {
+        padding: 20px;
+    }
+
+
+</style>
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="#">Gem</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -55,7 +70,8 @@
                     Tools
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
-                    <a class="dropdown-item" style="color: red;" href="/reset?key=ENTER_KEY_HERE">Clear (delete everything)</a>
+                    <a class="dropdown-item" style="color: red;" href="/reset?key=ENTER_KEY_HERE">Clear (delete
+                        everything)</a>
                 </div>
             </li>
         </ul>
@@ -81,7 +97,7 @@
     </thead>
     <tbody>
 
-    <tr th:each="link : ${links}" class="entry">
+    <tr th:each="link : ${links}" th:class="${link.used == true} ? 'entry used' : ' entry unused'">
         <th scope="row"><span th:text="${link.id}">link.id</span></th>
         <td><a th:href="${link.uri}"><span th:text="${link.uri}">link.uri</span></a></td>
         <td><span th:text="${link.date}">link.date</span></td>

@@ -58,11 +58,18 @@ public class DebugController {
 
         try {
             json = om.writeValueAsString(map);
+
         } catch (JsonProcessingException e) {
             e.printStackTrace();
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .body("{\"error\":\"Constructing JSON has failed.\"}");
         }
 
-        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON_UTF8).body(json);
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .body(json);
     }
 
     @GetMapping("/toggle/{id}")

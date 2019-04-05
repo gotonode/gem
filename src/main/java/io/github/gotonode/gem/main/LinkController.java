@@ -36,13 +36,21 @@ public class LinkController {
             }
         }
 
-        System.out.println("Fetching a new link (correct key)");
+        System.out.println("Fetching a new entry (correct key)");
 
         Link link = linkService.fetch();
 
+        if (link == null) {
+            response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+            response.setHeader("Location", "https://gem.herokuapp.com/done");
+            response.setHeader("Connection", "close");
+
+            return;
+        }
+
         String uri = link.getUri();
 
-        System.out.println("Returning link: " + link);
+        System.out.println("Returning entry: " + link);
 
         response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
         response.setHeader("Location", uri);
@@ -52,7 +60,7 @@ public class LinkController {
     @PostMapping("/add")
     public ResponseEntity add(@RequestBody String uri) {
 
-        System.out.println("Got a POST request to add a link: " + uri);
+        System.out.println("Got a POST request to add a link with URL: " + uri);
 
         Link link = linkService.add(uri);
 
@@ -72,14 +80,24 @@ public class LinkController {
 
         try {
             json = om.writeValueAsString(map);
+
         } catch (JsonProcessingException e) {
             e.printStackTrace();
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .body("{\"error\":\"Constructing JSON has failed.\"}");
         }
 
-        System.out.println("Added a new link: " + json);
+        System.out.println("Added a new entry: " + link);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body(json);
+    }
+
+    @GetMapping("/done")
+    public String done() {
+        return "done";
     }
 }
