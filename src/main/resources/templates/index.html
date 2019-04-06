@@ -99,7 +99,7 @@
 
     <tr th:each="link : ${links}" th:class="${link.used == true} ? 'entry used' : ' entry unused'">
         <th scope="row"><span th:text="${link.id}">link.id</span></th>
-        <td><a th:href="${link.uri}"><span th:text="${link.uri}">link.uri</span></a></td>
+        <td><a th:href="${link.uri}" target="_blank"><span th:text="${link.uri}">link.uri</span></a></td>
         <td><span th:text="${link.date}">link.date</span></td>
         <td><span th:text="${link.used}">link.used</span></td>
         <td><a th:href="'/toggle/' + ${link.id}" class="btn btn-info">Toggle</a></td>
