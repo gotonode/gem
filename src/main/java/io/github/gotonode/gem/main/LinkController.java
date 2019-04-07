@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -22,7 +23,11 @@ public class LinkController {
 
     @GetMapping("/")
     public String index(Model model) {
-        model.addAttribute("links", linkService.findAll());
+        List<Link> links = linkService.findAll();
+
+        model.addAttribute("links",links);
+        model.addAttribute("entries", links.size());
+
         return "index";
     }
 
