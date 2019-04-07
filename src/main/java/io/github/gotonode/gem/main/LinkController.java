@@ -49,7 +49,7 @@ public class LinkController {
             response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
             response.setHeader("Location", "/done");
             response.setHeader("Connection", "close");
-
+            
             return;
         }
 
@@ -60,6 +60,7 @@ public class LinkController {
         response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
         response.setHeader("Location", uri);
         response.setHeader("Connection", "close");
+        response.setHeader("Cache-Control", "no-cache, no-store, max-age=1");
     }
 
     @PostMapping("/add")
