@@ -1,7 +1,18 @@
-a.used {
-    color: darkred;
+tr.unused {
+    background-color: #eef6ed;
+}
+tr.used {
+    background-color: #f6f8fb;
 }
 
-a.unused {
-    color: darkgreen;
+table {
+    padding: 20px;
+}
+
+h1 {
+    font-size: 2em;
+}
+
+div#info {
+    margin-left: 20px;
 }
