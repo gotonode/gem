@@ -9,6 +9,11 @@ public class Main {
 
     public static final int MAX_DATABASE_ENTRIES = 10_000; // Limitation imposed by free Heroku dyno.
 
+    @PostConstruct
+    public void started() {
+        TimeZone.setDefault(TimeZone.getTimeZone("Europe/Helsinki"));
+    }
+
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
     }
