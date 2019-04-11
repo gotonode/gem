@@ -30,10 +30,6 @@ public class LinkService {
         return link;
     }
 
-    public List<Link> findAll() {
-        return linkRepository.findAllByOrderByIdAsc();
-    }
-
     private void ensureCompliance() {
 
         long count = linkRepository.count();
@@ -60,20 +56,18 @@ public class LinkService {
         System.out.println("Database is in compliance again (" + count + " entries), ready to accept new links.");
     }
 
-    public Link add(String uri) {
+    public Link add(String address, int site, int version) {
 
         ensureCompliance();
 
-        uri = uri.replace("uri=", "");
+        address = address.trim();
 
-        uri = uri.trim();
-
-        if (uri.length() == 0) {
+        if (address.length() == 0) {
             return null;
         }
 
         try {
-            uri = URLDecoder.decode(uri, StandardCharsets.UTF_8.name());
+            address = URLDecoder.decode(address, StandardCharsets.UTF_8.name());
 
         } catch (UnsupportedEncodingException e) {
             // Actually should never happen. Really.
@@ -84,10 +78,28 @@ public class LinkService {
 
         Link link = new Link();
 
-        link.setUri(uri);
+        link.setUri(address);
         link.setUsed(false);
         link.setDate(Date.from(Instant.now()));
+        link.setSite(site);
+        link.setVersion(version);
 
         return linkRepository.save(link);
+    }
+
+    public List<Link> findAll() {
+        return linkRepository.findAllByOrderByIdAsc();
+    }
+
+    public List<Link> findUnused() {
+        return linkRepository.findAllByUsedOrderByIdAsc(false);
+    }
+
+    public long getCount() {
+        return linkRepository.count();
+    }
+
+    public long getUnusedCount() {
+        return linkRepository.countByUsed(false);
     }
 }

@@ -14,4 +14,8 @@ public interface LinkRepository extends JpaRepository<Link, Long> {
 
     @Query("SELECT l FROM Link l WHERE l.used = false ORDER BY id ASC")
     Link findFirstUnused();
+
+    List<Link> findAllByUsedOrderByIdAsc(boolean used);
+
+    long countByUsed(boolean used);
 }

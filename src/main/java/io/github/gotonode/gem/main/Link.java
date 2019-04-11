@@ -28,6 +28,12 @@ public class Link implements Serializable {
     @Column(name = "date", nullable = false)
     private Date date;
 
+    @Column(name = "site", nullable = false)
+    private int site;
+
+    @Column(name = "version", nullable = false)
+    private int version;
+
     @Override
     public String toString() {
         return "Link{" +
@@ -35,6 +41,8 @@ public class Link implements Serializable {
                 ", uri='" + uri + '\'' +
                 ", used=" + used +
                 ", date=" + date +
+                ", site=" + site +
+                ", version=" + version +
                 '}';
     }
 }

@@ -10,13 +10,28 @@
 <div id="info">
     <h1>Control Panel</h1>
 
-    <p>Entries in database: <strong th:text="${entries}">entries</strong></p>
+    <div class="container-fluid">
+        <div class="row no-padding">
+            <div class="col-6 text-left no-padding">
+                <p>New entries: <strong th:text="${unused}">unused</strong> (<strong
+                        th:text="${entries}">entries</strong> total)</p>
+            </div>
+            <div class="col-6 text-right no-padding">
+                <a href="/?showAll=1">Show all</a> | <a href="/?showAll=0">Show only unused</a>
+            </div>
+        </div>
+    </div>
+
+
 </div>
+
 
 <table class="table">
     <thead>
     <th scope="col">ID</th>
     <th scope="col">URL</th>
+    <th scope="col">Site</th>
+    <th scope="col">Version</th>
     <th scope="col">Added</th>
     <th scope="col">Used</th>
     <th scope="col">Toggle Used</th>
@@ -27,6 +42,8 @@
     <tr th:each="link : ${links}" th:class="${link.used == true} ? 'entry used' : ' entry unused'">
         <th scope="row"><span th:text="${link.id}">link.id</span></th>
         <td><a th:href="${link.uri}" target="_blank"><span th:text="${link.uri}">link.uri</span></a></td>
+        <td><span th:text="${link.site}">link.site</span></td>
+        <td><span th:text="${link.version}">link.version</span></td>
         <td><span th:text="${link.date}">link.date</span></td>
         <td><span th:text="${link.used}">link.used</span></td>
         <td><a th:href="'/toggle/' + ${link.id}" class="btn btn-info"><i class="fas fa-sliders-h"></i> Toggle</a></td>

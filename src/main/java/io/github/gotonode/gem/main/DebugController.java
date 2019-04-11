@@ -116,6 +116,7 @@ public class DebugController {
             response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
             response.setHeader("Location", "/");
             response.setHeader("Connection", "close");
+            response.setHeader("Cache-Control", Main.CACHE_CONTROL);
             return;
         }
 
@@ -124,6 +125,7 @@ public class DebugController {
         response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
         response.setHeader("Location", uri);
         response.setHeader("Connection", "close");
+        response.setHeader("Cache-Control", Main.CACHE_CONTROL);
     }
 
     @GetMapping("/fetchDebug")
@@ -135,6 +137,7 @@ public class DebugController {
             response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
             response.setHeader("Location", "/done");
             response.setHeader("Connection", "close");
+            response.setHeader("Cache-Control", Main.CACHE_CONTROL);
 
             return;
         }
@@ -144,6 +147,7 @@ public class DebugController {
         response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
         response.setHeader("Location", uri);
         response.setHeader("Connection", "close");
+        response.setHeader("Cache-Control", Main.CACHE_CONTROL);
     }
 
 }

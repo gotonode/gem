@@ -12,6 +12,8 @@ public class Main {
 
     public static final int MAX_DATABASE_ENTRIES = 10_000; // Limitation imposed by free Heroku dyno.
 
+    public static final String CACHE_CONTROL = "no-cache, no-store, max-age=1";
+
     @PostConstruct
     public void started() {
         TimeZone.setDefault(TimeZone.getTimeZone("Europe/Helsinki"));

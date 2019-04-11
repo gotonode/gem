@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,12 +22,33 @@ public class LinkController {
     @Autowired
     private LinkService linkService;
 
-    @GetMapping("/")
-    public String index(Model model) {
-        List<Link> links = linkService.findAll();
+    @Autowired
+    private HttpSession httpSession;
 
-        model.addAttribute("links",links);
-        model.addAttribute("entries", links.size());
+    @GetMapping("/")
+    public String index(Model model, @RequestParam(required = false) Integer showAll) {
+
+        if (showAll == null) {
+            if (httpSession.getAttribute("showAll") == null) {
+                showAll = 1; // Defaults to show all.
+            }
+        } else {
+            httpSession.setAttribute("showAll", showAll);
+        }
+
+        List<Link> links;
+
+        Object sa = httpSession.getAttribute("showAll");
+
+        if (sa != null && (int) sa == 1) {
+            links = linkService.findAll();
+        } else {
+            links = linkService.findUnused();
+        }
+
+        model.addAttribute("links", links);
+        model.addAttribute("entries", linkService.getCount());
+        model.addAttribute("unused", linkService.getUnusedCount());
 
         return "index";
     }
@@ -49,7 +71,8 @@ public class LinkController {
             response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
             response.setHeader("Location", "/done");
             response.setHeader("Connection", "close");
-            
+            response.setHeader("Cache-Control", Main.CACHE_CONTROL);
+
             return;
         }
 
@@ -60,15 +83,15 @@ public class LinkController {
         response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
         response.setHeader("Location", uri);
         response.setHeader("Connection", "close");
-        response.setHeader("Cache-Control", "no-cache, no-store, max-age=1");
+        response.setHeader("Cache-Control", Main.CACHE_CONTROL);
     }
 
     @PostMapping("/add")
-    public ResponseEntity add(@RequestBody String uri) {
+    public ResponseEntity add(@RequestParam String address, @RequestParam int site, @RequestParam int version) {
 
-        System.out.println("Got a POST request to add a link with URL: " + uri);
+        System.out.println("Got a POST request to add a link with URL: " + address);
 
-        Link link = linkService.add(uri);
+        Link link = linkService.add(address, site, version);
 
         if (link == null) {
             System.out.println("Link was not added because it was just an empty string.");

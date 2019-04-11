@@ -1,8 +1,9 @@
+.navbar-brand {
+    color: blue !important;
+}
+
 tr.unused {
     background-color: #eef6ed;
-}
-tr.used {
-    background-color: #f6f8fb;
 }
 
 table {
@@ -15,4 +16,14 @@ h1 {
 
 div#info {
     margin-left: 20px;
+    margin-right: 20px;
+}
+
+.no-padding {
+    padding: 0px;
+}
+
+.navbar {
+    border-bottom: 2px solid gray;
+    margin-bottom: 15px;
 }
