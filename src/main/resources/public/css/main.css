@@ -18,11 +18,16 @@ table {
 
 h1 {
     font-size: 2em;
+    font-family: monospace;
 }
 
 div#info {
     margin-left: 20px;
     margin-right: 20px;
+}
+
+div#details {
+    font-family: monospace;
 }
 
 .no-padding {
