@@ -38,11 +38,22 @@ public class DebugController {
     }
 
     @PostMapping("/debug/reset")
+    @ResponseBody
     public String reset() {
 
-        debugService.reset();
+        // The following feature has been disabled since it's most likely
+        // no longer needed. It will remain here for the foreseeable future.
 
-        return "redirect:/";
+        if (System.getenv("HEROKU") != null) {
+
+            // debugService.reset();
+            return "This feature has been disabled. Remove individual links as needed.";
+
+        } else {
+
+            // debugService.reset();
+            return "This feature has been disabled. Remove individual links as needed or delete the database.";
+        }
     }
 
     @GetMapping("/debug/random")
