@@ -31,6 +31,11 @@ public class DebugController {
         if (amount == null) {
             debugService.generate(1);
         } else {
+            if (System.getenv("HEROKU") != null) {
+                if (amount > 5) {
+                    return "Cannot generate more than 5 links when running on Heroku (production).";
+                }
+            }
             debugService.generate(amount);
         }
 
