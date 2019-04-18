@@ -46,8 +46,8 @@
         <td><span th:text="${link.version}">link.version</span></td>
         <td><span th:text="${link.date}">link.date</span></td>
         <td><span th:text="${link.used}">link.used</span></td>
-        <td><a th:href="'/toggle/' + ${link.id}" class="btn btn-info"><i class="fas fa-sliders-h"></i> Toggle</a></td>
-        <td><a th:href="'/delete/' + ${link.id}" class="btn btn-danger"><i class="fas fa-eraser"></i> Delete</a></td>
+        <td><a th:href="'/toggle/' + ${link.id}" class="btn btn-outline-info"><i class="fas fa-sliders-h"></i> Toggle</a></td>
+        <td><a th:href="'/delete/' + ${link.id}" class="btn btn-outline-danger"><i class="fas fa-eraser"></i> Delete</a></td>
     </tr>
     </tbody>
 </table>
