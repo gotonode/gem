@@ -45,9 +45,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public UserDetailsService userDetailsService() {
 
+        String password;
+
+        if (System.getenv("PASSWORD") == null) {
+            password = "dev";
+        } else {
+            password = System.getenv("PASSWORD");
+        }
+
         UserDetails user = User.withDefaultPasswordEncoder()
                 .username("admin")
-                .password("admin")
+                .password(password)
                 .authorities("ADMIN")
                 .build();
 
