@@ -15,9 +15,10 @@
 
     <div class="container-fluid">
         <div class="row no-padding">
-            <div class="col-6 text-left no-padding">
-                <p>New entries: <strong th:text="${unused}" class="badge badge-primary">unused</strong> (<strong
-                        th:text="${entries}" class="badge badge-secondary">entries</strong> total)</p>
+            <div class="col-6 text-left no-padding" style="font-family: monospace;">
+                <p>New entries <span th:text="${unused}" class="badge badge-primary">unused</span>, total entries <span
+                        th:text="${entries}" class="badge badge-secondary">entries</span>, capacity <span
+                        class="badge badge-secondary">10,000</span></p>
             </div>
             <div class="col-6 text-right no-padding">
                 <a href="/?showAll=true" th:classappend="${showAll} ? active-button">Show all</a> |
