@@ -1,7 +1,11 @@
-package io.github.gotonode.gem.main;
+package io.github.gotonode.gem.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.gotonode.gem.domain.Link;
+import io.github.gotonode.gem.form.LinkForm;
+import io.github.gotonode.gem.service.LinkService;
+import io.github.gotonode.gem.Main;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -12,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,11 +31,14 @@ public class LinkController {
     private HttpSession httpSession;
 
     @GetMapping("/")
-    public String index(Model model, @RequestParam(required = false) Integer showAll) {
+    public String index(Model model, @RequestParam(required = false) Boolean showAll) {
 
         if (showAll == null) {
             if (httpSession.getAttribute("showAll") == null) {
-                showAll = 1; // Defaults to show all.
+                showAll = true;
+                httpSession.setAttribute("showAll", showAll);
+            } else {
+                showAll = (Boolean) httpSession.getAttribute("showAll");
             }
         } else {
             httpSession.setAttribute("showAll", showAll);
@@ -38,14 +46,13 @@ public class LinkController {
 
         List<Link> links;
 
-        Object sa = httpSession.getAttribute("showAll");
-
-        if (sa != null && (int) sa == 1) {
+        if (showAll) {
             links = linkService.findAll();
         } else {
             links = linkService.findUnused();
         }
 
+        model.addAttribute("showAll", showAll);
         model.addAttribute("links", links);
         model.addAttribute("entries", linkService.getCount());
         model.addAttribute("unused", linkService.getUnusedCount());
@@ -87,11 +94,11 @@ public class LinkController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity add(@RequestParam String address, @RequestParam int site, @RequestParam int version) {
+    public ResponseEntity add(@Valid @ModelAttribute LinkForm linkForm) {
 
-        System.out.println("Got a POST request to add a link with URL: " + address);
+        System.out.println("Got a POST request to add a link with URL: " + linkForm);
 
-        Link link = linkService.add(address, site, version);
+        Link link = linkService.add(linkForm);
 
         if (link == null) {
             System.out.println("Link was not added because it was just an empty string.");
@@ -128,5 +135,25 @@ public class LinkController {
     @GetMapping("/done")
     public String done() {
         return "done";
+    }
+
+    @PostMapping("/toggle")
+    public String toggle(@RequestParam Long id) {
+
+        Link link = linkService.toggle(id);
+
+        System.out.println("Toggled the used-state of: " + link);
+
+        return "redirect:/";
+    }
+
+    @PostMapping("/delete")
+    public String delete(@RequestParam Long id) {
+
+        linkService.delete(id);
+
+        System.out.println("Deleted the link with ID " + id + ".");
+
+        return "redirect:/";
     }
 }

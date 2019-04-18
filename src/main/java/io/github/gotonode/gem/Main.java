@@ -1,12 +1,18 @@
-package io.github.gotonode.gem.main;
+package io.github.gotonode.gem;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
 import javax.annotation.PostConstruct;
 import java.util.TimeZone;
 
-//@ComponentScan(basePackages = {"io.github.gotonode.gem.controller", "io.github.gotonode.gem.repository"})
+@ComponentScan({
+        "io.github.gotonode.gem.domain",
+        "io.github.gotonode.gem.controller",
+        "io.github.gotonode.gem.service",
+        "io.github.gotonode.gem.repository",
+        "io.github.gotonode.gem.security"})
 @SpringBootApplication
 public class Main {
 

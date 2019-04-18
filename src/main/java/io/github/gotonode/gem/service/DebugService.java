@@ -1,5 +1,7 @@
-package io.github.gotonode.gem.main;
+package io.github.gotonode.gem.service;
 
+import io.github.gotonode.gem.domain.Link;
+import io.github.gotonode.gem.repository.LinkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,15 +20,11 @@ public class DebugService {
 
     private Random random = new Random();
 
-    public Link generate() {
-        return generate(1).get(0);
-    }
-
-    public List<Link> generate(int count) {
+    public List<Link> generate(int amount) {
 
         List<Link> links = new ArrayList<>();
 
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < amount; i++) {
 
             Link link = new Link();
 
@@ -39,23 +37,8 @@ public class DebugService {
         return links;
     }
 
-    public void delete(long id) {
-        linkRepository.deleteById(id);
-    }
-
     public void reset() {
         linkRepository.deleteAll();
-    }
-
-    public Link toggle(long id) {
-        Link link = linkRepository.getOne(id);
-
-        boolean used = link.isUsed();
-        used = !used;
-
-        link.setUsed(used);
-
-        return linkRepository.save(link);
     }
 
     public Link random() {

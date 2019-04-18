@@ -1,5 +1,9 @@
-package io.github.gotonode.gem.main;
+package io.github.gotonode.gem.service;
 
+import io.github.gotonode.gem.Main;
+import io.github.gotonode.gem.domain.Link;
+import io.github.gotonode.gem.form.LinkForm;
+import io.github.gotonode.gem.repository.LinkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,18 +60,18 @@ public class LinkService {
         System.out.println("Database is in compliance again (" + count + " entries), ready to accept new links.");
     }
 
-    public Link add(String address, int site, int version) {
+    public Link add(LinkForm linkForm) {
 
         ensureCompliance();
 
-        address = address.trim();
+        linkForm.setAddress(linkForm.getAddress().trim());
 
-        if (address.length() == 0) {
+        if (linkForm.getAddress().isEmpty()) {
             return null;
         }
 
         try {
-            address = URLDecoder.decode(address, StandardCharsets.UTF_8.name());
+            linkForm.setAddress(URLDecoder.decode(linkForm.getAddress(), StandardCharsets.UTF_8.name()));
 
         } catch (UnsupportedEncodingException e) {
             // Actually should never happen. Really.
@@ -78,11 +82,12 @@ public class LinkService {
 
         Link link = new Link();
 
-        link.setUri(address);
+        link.setUri(linkForm.getAddress());
+        link.setSite(linkForm.getSite());
+        link.setVersion(linkForm.getVersion());
+
         link.setUsed(false);
         link.setDate(Date.from(Instant.now()));
-        link.setSite(site);
-        link.setVersion(version);
 
         return linkRepository.save(link);
     }
@@ -101,5 +106,20 @@ public class LinkService {
 
     public long getUnusedCount() {
         return linkRepository.countByUsed(false);
+    }
+
+    public void delete(long id) {
+        linkRepository.deleteById(id);
+    }
+
+    public Link toggle(long id) {
+        Link link = linkRepository.getOne(id);
+
+        boolean used = link.isUsed();
+        used = !used;
+
+        link.setUsed(used);
+
+        return linkRepository.save(link);
     }
 }

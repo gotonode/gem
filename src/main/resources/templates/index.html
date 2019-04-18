@@ -1,7 +1,10 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.springframework.org/security/tags">
 
-<head th:replace="fragments/header :: head"><title>Gem</title></head>
+<head th:replace="fragments/header :: head(title = 'Index')">
+    <title>Gem</title>
+</head>
 
 <body>
 
@@ -13,41 +16,52 @@
     <div class="container-fluid">
         <div class="row no-padding">
             <div class="col-6 text-left no-padding">
-                <p>New entries: <strong th:text="${unused}">unused</strong> (<strong
-                        th:text="${entries}">entries</strong> total)</p>
+                <p>New entries: <strong th:text="${unused}" class="badge badge-primary">unused</strong> (<strong
+                        th:text="${entries}" class="badge badge-secondary">entries</strong> total)</p>
             </div>
             <div class="col-6 text-right no-padding">
-                <a href="/?showAll=1">Show all</a> | <a href="/?showAll=0">Show only unused</a>
+                <a href="/?showAll=true" th:classappend="${showAll} ? active-button">Show all</a> |
+                <a href="/?showAll=false" th:classappend="${!showAll} ? active-button">Show only unused</a>
             </div>
         </div>
     </div>
 
-
 </div>
-
 
 <table class="table table-sm">
     <thead>
-    <th scope="col">ID</th>
-    <th scope="col">URL</th>
-    <th scope="col">Site</th>
-    <th scope="col">Version</th>
-    <th scope="col">Added</th>
-    <th scope="col">Used</th>
-    <th scope="col">Toggle Used</th>
-    <th scope="col">Delete</th>
+        <th scope="col">ID</th>
+        <th scope="col">URL</th>
+        <th scope="col">Site</th>
+        <th scope="col">Version</th>
+        <th scope="col">Added</th>
+        <th scope="col">Used</th>
+        <th scope="col">Toggle Used</th>
+        <th scope="col" sec:authorize="isAuthenticated()">Delete</th>
     </thead>
+
     <tbody>
 
-    <tr th:each="link : ${links}" th:class="${link.used == true} ? 'entry used' : ' entry unused'">
+    <tr th:each="link : ${links}" th:class="${link.used == true} ? 'entry used' : 'entry unused'">
         <th scope="row"><span th:text="${link.id}">link.id</span></th>
-        <td><a th:href="${link.uri}" target="_blank"><span th:text="${link.uri}" class="text-break">link.uri</span></a></td>
+        <td><a th:href="${link.uri}" target="_blank"><span th:text="${link.uri}" class="text-break">link.uri</span></a>
+        </td>
         <td><span th:text="${link.site}">link.site</span></td>
         <td><span th:text="${link.version}">link.version</span></td>
         <td><span th:text="${link.date}">link.date</span></td>
         <td><span th:text="${link.used}">link.used</span></td>
-        <td><a th:href="'/toggle/' + ${link.id}" class="btn btn-outline-info"><i class="fas fa-sliders-h"></i> Toggle</a></td>
-        <td><a th:href="'/delete/' + ${link.id}" class="btn btn-outline-danger"><i class="fas fa-eraser"></i> Delete</a></td>
+        <td>
+            <form th:action="@{/toggle}" method="POST">
+                <input type="hidden" name="id" th:value="${link.id}" />
+                <button type="submit" class="btn btn-outline-info w-100"><i class="fas fa-sliders-h"></i> Toggle</button>
+            </form>
+        </td>
+        <td sec:authorize="isAuthenticated()">
+            <form th:action="@{/delete}" method="POST">
+                <input type="hidden" name="id" th:value="${link.id}" />
+                <button type="submit" class="btn btn-outline-danger w-100"><i class="fas fa-trash"></i> Delete</button>
+            </form>
+        </td>
     </tr>
     </tbody>
 </table>

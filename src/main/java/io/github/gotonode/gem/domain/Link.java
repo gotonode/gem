@@ -1,4 +1,4 @@
-package io.github.gotonode.gem.main;
+package io.github.gotonode.gem.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

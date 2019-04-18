@@ -1,9 +1,15 @@
+body {
+    /* So that the page won't "jitter" around when the scrollbar is visible or not. */
+    overflow-y: scroll;
+    margin: 0;
+}
+
 .navbar-brand {
     color: blue !important;
 }
 
 tr.unused {
-    background-color: #eef6ed;
+    background-color: #f8fef7;
 }
 
 table {
@@ -26,4 +32,12 @@ div#info {
 .navbar {
     border-bottom: 2px solid gray;
     margin-bottom: 15px;
+}
+
+.active-button {
+    font-weight: bold;
+}
+
+.table {
+    margin: 0;
 }

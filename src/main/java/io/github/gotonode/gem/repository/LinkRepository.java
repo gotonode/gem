@@ -1,5 +1,6 @@
-package io.github.gotonode.gem.main;
+package io.github.gotonode.gem.repository;
 
+import io.github.gotonode.gem.domain.Link;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
