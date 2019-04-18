@@ -142,7 +142,7 @@ public class LinkController {
 
         Link link = linkService.toggle(id);
 
-        System.out.println("Toggled the used-state of: " + link);
+        System.out.println("Toggled link: " + link);
 
         return "redirect:/";
     }
@@ -150,9 +150,9 @@ public class LinkController {
     @PostMapping("/delete")
     public String delete(@RequestParam Long id) {
 
-        linkService.delete(id);
+        Link link = linkService.delete(id);
 
-        System.out.println("Deleted the link with ID " + id + ".");
+        System.out.println("Deleted link: " + link);
 
         return "redirect:/";
     }

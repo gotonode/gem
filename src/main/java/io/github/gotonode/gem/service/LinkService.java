@@ -108,8 +108,13 @@ public class LinkService {
         return linkRepository.countByUsed(false);
     }
 
-    public void delete(long id) {
-        linkRepository.deleteById(id);
+    public Link delete(long id) {
+
+        Link link = linkRepository.findById(id).get();
+
+        linkRepository.delete(link);
+
+        return link;
     }
 
     public Link toggle(long id) {
