@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 @Controller
 public class DebugController {
@@ -16,18 +15,9 @@ public class DebugController {
     @Autowired
     private DebugService debugService;
 
-    @RequestMapping(value = "/debug/generateJson", method = RequestMethod.POST, produces = "application/json")
-    @ResponseBody
-    public List<Link> generateJson(@RequestParam Integer amount) {
-        if (amount == null) {
-            return debugService.generate(1);
-        } else {
-            return debugService.generate(amount);
-        }
-    }
-
     @PostMapping("/debug/generate")
     public String generate(@RequestParam Integer amount) {
+
         if (amount == null) {
             debugService.generate(1);
         } else {
@@ -58,45 +48,25 @@ public class DebugController {
 
     @GetMapping("/debug/random")
     public void random(HttpServletResponse response) {
-
-        Link link = debugService.random();
-
-        if (link == null) {
-            response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-            response.setHeader("Location", "/done");
-            response.setHeader("Connection", "close");
-            response.setHeader("Cache-Control", Main.CACHE_CONTROL);
-            return;
-        }
-
-        String uri = link.getUri();
-
-        response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-        response.setHeader("Location", uri);
-        response.setHeader("Connection", "close");
-        response.setHeader("Cache-Control", Main.CACHE_CONTROL);
+        redirect(response, debugService.random());
     }
 
     @GetMapping("/debug/fetch")
     public void fetchDebug(HttpServletResponse response) {
+        redirect(response, debugService.fetchDebug());
+    }
 
-        Link link = debugService.fetchDebug();
-
-        if (link == null) {
-            response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-            response.setHeader("Location", "/done");
-            response.setHeader("Connection", "close");
-            response.setHeader("Cache-Control", Main.CACHE_CONTROL);
-
-            return;
-        }
-
-        String uri = link.getUri();
+    private void redirect(HttpServletResponse response, Link link) {
 
         response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-        response.setHeader("Location", uri);
         response.setHeader("Connection", "close");
         response.setHeader("Cache-Control", Main.CACHE_CONTROL);
+
+        if (link == null) {
+            response.setHeader("Location", "/done");
+        } else {
+            response.setHeader("Location", link.getUri());
+        }
     }
 
 }
