@@ -7,6 +7,8 @@ public class LinkData {
 
     private String address;
 
+    private String key;
+
     private int site;
 
     private int version;

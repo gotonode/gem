@@ -1,16 +1,11 @@
 package io.github.gotonode.gem.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.gotonode.gem.domain.Link;
 import io.github.gotonode.gem.form.LinkData;
 import io.github.gotonode.gem.service.LinkService;
 import io.github.gotonode.gem.Main;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 public class LinkController {
@@ -65,7 +58,7 @@ public class LinkController {
     public void fetch(@RequestParam(required = false) String key, HttpServletResponse response) {
 
         if (System.getenv().containsKey("HEROKU")) {
-            if (!System.getenv().get("GEMKEY").equals(key.trim())) {
+            if (!System.getenv().get("GET_KEY").equals(key.trim())) {
                 System.out.println("Incorrect key used. Aborting operation.");
                 return;
             }
@@ -100,7 +93,22 @@ public class LinkController {
 
         System.out.println("Got a POST request to add a link: " + linkData);
 
+        String key = linkData.getKey();
+
+        if ((key == null) || (!key.equals(System.getenv("POST_KEY")))) {
+
+            System.out.println("Incorrect posting key.");
+
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("message", "The key was not correct.");
+            return jsonObject.toString();
+
+        } else {
+            linkData.setKey(null); // For security, we erase this.
+        }
+
         if (linkData.getAddress().trim().isEmpty()) {
+
             System.out.println("LinkData was not added because Address was empty.");
 
             JSONObject jsonObject = new JSONObject();

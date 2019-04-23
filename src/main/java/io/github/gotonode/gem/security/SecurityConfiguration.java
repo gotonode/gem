@@ -33,6 +33,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/debug", "/debug/**").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.POST, "/debug", "/debug/**").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.POST, "/toggle", "/toggle/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/add").permitAll()
                 .antMatchers(HttpMethod.GET, "/fetch").permitAll()
                 .antMatchers(HttpMethod.GET, "/done").permitAll()
                 .antMatchers(HttpMethod.GET, "/css", "/css/**").permitAll()
