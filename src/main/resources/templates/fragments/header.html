@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.springframework.org/security/tags">
 
 <head th:fragment="head(title)">
@@ -17,15 +17,17 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
           integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 
-    <script src="/js/main.js" th:src="@{/js/main.js}"></script>
-    <link rel="stylesheet" href="/css/main.css" th:href="@{~/css/main.css}" type="text/css" />
+    <script th:src="@{/js/main.js}"></script>
+
+    <link rel="stylesheet" th:href="@{~/css/main.css}" type="text/css" />
+    <link rel="stylesheet" th:href="@{~/css/external.css}" type="text/css" />
 
 </head>
 
 <body>
 
 <div th:fragment="menu">
-    <nav class="navbar navbar-light navbar-expand-lg" style="background-color: #e3f2fd;">
+    <nav class="navbar navbar-light navbar-expand-lg">
         <a class="navbar-brand title-text" href="/"><i class="far fa-gem"></i> Gem</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

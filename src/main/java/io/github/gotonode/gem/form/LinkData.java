@@ -3,7 +3,7 @@ package io.github.gotonode.gem.form;
 import lombok.Data;
 
 @Data
-public class LinkForm {
+public class LinkData {
 
     private String address;
 

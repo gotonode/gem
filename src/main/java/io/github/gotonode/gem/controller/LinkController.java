@@ -3,9 +3,10 @@ package io.github.gotonode.gem.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.gotonode.gem.domain.Link;
-import io.github.gotonode.gem.form.LinkForm;
+import io.github.gotonode.gem.form.LinkData;
 import io.github.gotonode.gem.service.LinkService;
 import io.github.gotonode.gem.Main;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -94,42 +95,24 @@ public class LinkController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity add(@Valid @ModelAttribute LinkForm linkForm) {
+    @ResponseBody
+    public String add(@Valid @ModelAttribute LinkData linkData) {
 
-        System.out.println("Got a POST request to add a link with URL: " + linkForm);
+        System.out.println("Got a POST request to add a link: " + linkData);
 
-        Link link = linkService.add(linkForm);
+        if (linkData.getAddress().trim().isEmpty()) {
+            System.out.println("LinkData was not added because Address was empty.");
 
-        if (link == null) {
-            System.out.println("Link was not added because it was just an empty string.");
-
-            return ResponseEntity.status(HttpStatus.OK)
-                    .contentType(MediaType.APPLICATION_JSON_UTF8)
-                    .body("{\"error\":\"The link was empty.\"}");
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("message", "Address was empty or contained only whitespace characters.");
+            return jsonObject.toString();
         }
 
-        Map<Long, String> map = new HashMap<>();
-        map.put(link.getId(), link.getUri());
-
-        ObjectMapper om = new ObjectMapper();
-        String json = "";
-
-        try {
-            json = om.writeValueAsString(map);
-
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-
-            return ResponseEntity.status(HttpStatus.OK)
-                    .contentType(MediaType.APPLICATION_JSON_UTF8)
-                    .body("{\"error\":\"Constructing JSON has failed.\"}");
-        }
+        Link link = linkService.add(linkData);
 
         System.out.println("Added a new entry: " + link);
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body(json);
+        return new JSONObject(link).toString();
     }
 
     @GetMapping("/done")

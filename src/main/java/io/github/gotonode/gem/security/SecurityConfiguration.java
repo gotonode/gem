@@ -27,9 +27,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         httpSecurity.authorizeRequests()
                 .antMatchers("/h2-console", "/h2-console/**").hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.GET,"/").permitAll()
-                .antMatchers(HttpMethod.GET,"/debug", "/debug/**").hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.POST,"/debug", "/debug/**").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.GET, "/").permitAll()
+                .antMatchers(HttpMethod.GET, "/debug", "/debug/**").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.POST, "/debug", "/debug/**").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.POST, "/toggle", "/toggle/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/fetch").permitAll()
                 .antMatchers(HttpMethod.GET, "/done").permitAll()

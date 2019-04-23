@@ -1,19 +1,38 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.springframework.org/security/tags">
 
 <head th:replace="fragments/header :: head(title = 'Done')">
     <title>Gem</title>
 </head>
 
-<body>
+<body id="grid">
 
-<div class="card">
-    <div class="card-header"><strong>Congratulations!</strong></div>
-    <div class="card-body">You're finished with all available links. Please check back later for more.<br /><br />Note:
-        Refreshing this page won't show any potential new links.
-    </div>
-    <div class="card-footer">
-        <small>gem.herokuapp.com</small>
+<div class="row mt-5 d-flex justify-content-center ml-1 mr-1">
+    <div class="col-12 col-md-6">
+        <div class="card">
+
+            <div class="card-header">
+                <strong>Congratulations!</strong>
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="d-none d-lg-block col-2 text-right">
+                        <i id="done-gem" class="far fa-check-square"></i>
+                    </div>
+                    <div class="col-12 col-lg-10">
+                        <p>You're finished with all available entries. Please check back later for more.</p>
+                        <p class="m-0">Click <a href="/">here</a> to go back to the index.</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="card-footer">
+                <small>Note: Refreshing this page won't show any potential new links.</small>
+            </div>
+        </div>
     </div>
 </div>
 

@@ -8,8 +8,12 @@ body {
     color: blue !important;
 }
 
+tr.used {
+    background-color: ghostwhite;
+}
+
 tr.unused {
-    background-color: #f8fef7;
+    background-color: #ecf9ea;
 }
 
 table {
@@ -37,6 +41,7 @@ div#details {
 .navbar {
     border-bottom: 2px solid gray;
     margin-bottom: 15px;
+    background-color: #e3f2fd;
 }
 
 .active-button {
@@ -45,4 +50,13 @@ div#details {
 
 .table {
     margin: 0;
+}
+
+.entry {
+    /* No content as of now. */
+}
+
+#done-gem {
+    font-size: 5em;
+    color: darkgoldenrod;
 }
