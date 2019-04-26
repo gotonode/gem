@@ -38,8 +38,8 @@
         <th scope="col">Version</th>
         <th scope="col">Added</th>
         <th scope="col">Used</th>
-        <th scope="col">Toggle Used</th>
-        <th scope="col" sec:authorize="isAuthenticated()">Delete</th>
+        <th scope="col" sec:authorize="isAuthenticated()">Toggle Used</th>
+        <th scope="col" sec:authorize="hasAuthority('ADMIN')">Delete</th>
         </thead>
 
         <tbody>
@@ -51,17 +51,19 @@
             <td><span th:text="${link.version}">link.version</span></td>
             <td><span th:text="${link.date}">link.date</span></td>
             <td><span th:text="${link.used}">link.used</span></td>
-            <td>
+            <td sec:authorize="isAuthenticated()">
                 <form th:action="@{/toggle}" method="POST">
                     <input type="hidden" name="id" th:value="${link.id}" />
-                    <button type="submit" class="btn btn-outline-info w-100"><i class="fas fa-sliders-h"></i> Toggle
+                    <button type="submit" class="btn btn-sm btn-outline-info w-100"><i class="fas fa-sliders-h"></i>
+                        Toggle
                     </button>
                 </form>
             </td>
-            <td sec:authorize="isAuthenticated()">
+            <td sec:authorize="hasAuthority('ADMIN')">
                 <form th:action="@{/delete}" method="POST">
                     <input type="hidden" name="id" th:value="${link.id}" />
-                    <button type="submit" class="btn btn-outline-danger w-100"><i class="fas fa-trash"></i> Delete
+                    <button type="submit" class="btn btn-sm btn-outline-danger w-100"><i class="fas fa-trash"></i>
+                        Delete
                     </button>
                 </form>
             </td>

@@ -32,7 +32,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/").permitAll()
                 .antMatchers(HttpMethod.GET, "/debug", "/debug/**").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.POST, "/debug", "/debug/**").hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.POST, "/toggle", "/toggle/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/delete", "/delete/**").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.POST, "/toggle", "/toggle/**").hasAnyAuthority("USER", "ADMIN")
                 .antMatchers(HttpMethod.POST, "/add").permitAll()
                 .antMatchers(HttpMethod.GET, "/fetch").permitAll()
                 .antMatchers(HttpMethod.GET, "/done").permitAll()
@@ -48,21 +49,35 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public UserDetailsService userDetailsService() {
 
-        String password;
+        String userPassword;
+        String adminPassword;
 
-        if (System.getenv("PASSWORD") == null) {
-            password = "dev";
+        if (System.getenv("ADMIN_PASSWORD") == null) {
+            adminPassword = "dev";
         } else {
-            password = System.getenv("PASSWORD");
+            adminPassword = System.getenv("ADMIN_PASSWORD");
         }
 
-        UserDetails user = User.withDefaultPasswordEncoder()
+        if (System.getenv("USER_PASSWORD") == null) {
+            userPassword = "dev";
+        } else {
+            userPassword = System.getenv("USER_PASSWORD");
+        }
+
+        UserDetails admin = User.withDefaultPasswordEncoder()
                 .username("admin")
-                .password(password)
+                .password(adminPassword)
                 .authorities("ADMIN")
                 .build();
 
+        UserDetails user = User.withDefaultPasswordEncoder()
+                .username("user")
+                .password(userPassword)
+                .authorities("USER")
+                .build();
+
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
+        manager.createUser(admin);
         manager.createUser(user);
 
         return manager;

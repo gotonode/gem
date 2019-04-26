@@ -57,7 +57,7 @@ public class LinkController {
     @GetMapping("/fetch")
     public void fetch(@RequestParam(required = false) String key, HttpServletResponse response) {
 
-        if (System.getenv().containsKey("HEROKU")) {
+        if (System.getenv().containsKey("GET_KEY")) {
             if (!System.getenv().get("GET_KEY").equals(key.trim())) {
                 System.out.println("Incorrect key used. Aborting operation.");
                 return;
