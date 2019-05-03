@@ -87,7 +87,7 @@ public class LinkController {
         response.setHeader("Cache-Control", Main.CACHE_CONTROL);
     }
 
-    @PostMapping("/add")
+    @PostMapping(value = "/add", produces = "application/json")
     @ResponseBody
     public String add(@Valid @ModelAttribute LinkData linkData) {
 
@@ -100,7 +100,11 @@ public class LinkController {
             System.out.println("Incorrect posting key.");
 
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("message", "The key was not correct.");
+            JSONObject jsonObjectMessage = new JSONObject();
+            jsonObjectMessage.put("code", Main.CODE_KEY_INCORRECT);
+            jsonObjectMessage.put("message", "The key was not correct.");
+
+            jsonObject.put("error", jsonObjectMessage);
             return jsonObject.toString();
 
         } else {
@@ -112,7 +116,11 @@ public class LinkController {
             System.out.println("LinkData was not added because Address was empty.");
 
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("message", "Address was empty or contained only whitespace characters.");
+            JSONObject jsonObjectMessage = new JSONObject();
+            jsonObjectMessage.put("code", Main.CODE_ADDRESS_EMPTY_OR_WHITESPACE_ONLY);
+            jsonObjectMessage.put("message", "Address was empty or contained only whitespace characters.");
+
+            jsonObject.put("error", jsonObjectMessage);
             return jsonObject.toString();
         }
 
