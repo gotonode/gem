@@ -13,6 +13,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalField;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -122,6 +128,41 @@ public class LinkController {
 
             jsonObject.put("error", jsonObjectMessage);
             return jsonObject.toString();
+        }
+
+        Link latestLink = linkService.findLatestByAddress(linkData.getAddress());
+
+        if (latestLink != null) {
+
+            Calendar fortnightCalendar = Calendar.getInstance();
+            fortnightCalendar.setTime(Date.from(Instant.now()));
+            fortnightCalendar.add(Calendar.DATE, 14);
+
+            Calendar latestLinkCalendar = Calendar.getInstance();
+            Date latestLinkDate = latestLink.getDate();
+            latestLinkCalendar.setTime(latestLinkDate);
+
+            long latestLinkDateMillis = latestLinkCalendar.getTimeInMillis();
+            long fortnightDateMillis = fortnightCalendar.getTimeInMillis();
+
+//        if (fortnightCalendar.getTime().compareTo(linkCalendar.getTime()) < 0) {
+//            System.out.println("LESS THAN 14 DAYS");
+//        } else {
+//            System.out.println("GREATER THAN 14 DAYS");
+//        }
+
+            if (latestLinkCalendar.before(fortnightCalendar)) {
+
+                String msg = "Already received less than 14 days ago.";
+
+                JSONObject jsonObject = new JSONObject();
+                JSONObject jsonObjectMessage = new JSONObject();
+                jsonObjectMessage.put("code", Main.CODE_ALREADY_RECEIVED);
+                jsonObjectMessage.put("message", msg);
+
+                System.out.println(msg);
+                return jsonObject.toString();
+            }
         }
 
         Link link = linkService.add(linkData);

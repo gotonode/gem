@@ -96,6 +96,18 @@ public class LinkService {
         return linkRepository.findAllByOrderByIdAsc();
     }
 
+    public Link findLatestByAddress(String address) {
+        return linkRepository.findFirstByUriOrderByDateAsc(address);
+    }
+
+    public Link findByAddress(String address) {
+        return linkRepository.findByUri(address);
+    }
+
+    public List<Link> findAllByAddress(String address) {
+        return linkRepository.findAllByUri(address);
+    }
+
     public List<Link> findUnused() {
         return linkRepository.findAllByUsedOrderByIdAsc(false);
     }

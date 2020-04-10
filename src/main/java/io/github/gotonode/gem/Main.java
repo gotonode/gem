@@ -18,6 +18,7 @@ public class Main {
 
     public static final int CODE_KEY_INCORRECT = 1001;
     public static final int CODE_ADDRESS_EMPTY_OR_WHITESPACE_ONLY = 1002;
+    public static final int CODE_ALREADY_RECEIVED = 1003;
 
     public static final int MAX_DATABASE_ENTRIES = 10_000; // Limitation imposed by free Heroku dyno.
 

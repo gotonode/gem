@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface LinkRepository extends JpaRepository<Link, Long> {
     Link findByUri(String uri);
+    List<Link> findAllByUri(String uri);
+    Link findFirstByUriOrderByDateAsc(String address);
     Link findFirstByOrderByIdAsc();
     Link findFirstByUsedOrderByIdAsc(boolean used);
     List<Link> findAllByOrderByIdAsc();
