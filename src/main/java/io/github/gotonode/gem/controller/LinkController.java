@@ -102,24 +102,25 @@ public class LinkController {
     @ResponseBody
     public String add(@Valid @ModelAttribute LinkData linkData) {
 
-        System.out.println("Got a POST request to add a link: " + linkData);
-
         String key = linkData.getKey();
+
+        linkData.setKey("[HIDDEN]"); // For security, we hide this.
+
+        System.out.println("Got a POST request to add a link: " + linkData);
 
         if ((key == null) || (!key.equals(System.getenv("POST_KEY")))) {
 
-            System.out.println("Incorrect posting key.");
+            String msg = "The key was not correct.";
 
             JSONObject jsonObject = new JSONObject();
             JSONObject jsonObjectMessage = new JSONObject();
             jsonObjectMessage.put("code", Main.CODE_KEY_INCORRECT);
-            jsonObjectMessage.put("message", "The key was not correct.");
-
+            jsonObjectMessage.put("message", msg);
             jsonObject.put("error", jsonObjectMessage);
-            return jsonObject.toString();
 
-        } else {
-            linkData.setKey(null); // For security, we erase this.
+            System.out.println(msg);
+
+            return jsonObject.toString();
         }
 
         if (linkData.getAddress() == null || linkData.getAddress().trim().isEmpty()) {
