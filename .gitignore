@@ -1,3 +1,7 @@
+bin/
+.run/
+.vscode/
+
 database.mv.db
 database.trace.db
 

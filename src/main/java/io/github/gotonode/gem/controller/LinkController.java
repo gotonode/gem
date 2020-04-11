@@ -10,16 +10,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDate;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.Temporal;
 import java.time.temporal.TemporalField;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
 
 @Controller
 public class LinkController {
@@ -117,16 +122,18 @@ public class LinkController {
             linkData.setKey(null); // For security, we erase this.
         }
 
-        if (linkData.getAddress().trim().isEmpty()) {
+        if (linkData.getAddress() == null || linkData.getAddress().trim().isEmpty()) {
 
-            System.out.println("LinkData was not added because Address was empty.");
+            String msg = "Address was empty or contained only whitespace characters.";
 
             JSONObject jsonObject = new JSONObject();
             JSONObject jsonObjectMessage = new JSONObject();
             jsonObjectMessage.put("code", Main.CODE_ADDRESS_EMPTY_OR_WHITESPACE_ONLY);
-            jsonObjectMessage.put("message", "Address was empty or contained only whitespace characters.");
-
+            jsonObjectMessage.put("message", msg);
             jsonObject.put("error", jsonObjectMessage);
+
+            System.out.println(msg);
+
             return jsonObject.toString();
         }
 
@@ -134,24 +141,16 @@ public class LinkController {
 
         if (latestLink != null) {
 
-            Calendar fortnightCalendar = Calendar.getInstance();
-            fortnightCalendar.setTime(Date.from(Instant.now()));
-            fortnightCalendar.add(Calendar.DATE, 14);
+            final long millisecondsInFortnight = 1209600000;
 
-            Calendar latestLinkCalendar = Calendar.getInstance();
-            Date latestLinkDate = latestLink.getDate();
-            latestLinkCalendar.setTime(latestLinkDate);
+            Date dateNow = Date.from(Instant.now());
+            Long millisNow = dateNow.getTime();
 
-            long latestLinkDateMillis = latestLinkCalendar.getTimeInMillis();
-            long fortnightDateMillis = fortnightCalendar.getTimeInMillis();
+            Date dateLatestLink = latestLink.getDate();
+            dateLatestLink.setTime(dateLatestLink.getTime() + millisecondsInFortnight);
+            Long millisLink = dateLatestLink.getTime();
 
-//        if (fortnightCalendar.getTime().compareTo(linkCalendar.getTime()) < 0) {
-//            System.out.println("LESS THAN 14 DAYS");
-//        } else {
-//            System.out.println("GREATER THAN 14 DAYS");
-//        }
-
-            if (latestLinkCalendar.before(fortnightCalendar)) {
+            if (millisNow.compareTo(millisLink) < 0) {
 
                 String msg = "Already received less than 14 days ago.";
 
@@ -159,8 +158,10 @@ public class LinkController {
                 JSONObject jsonObjectMessage = new JSONObject();
                 jsonObjectMessage.put("code", Main.CODE_ALREADY_RECEIVED);
                 jsonObjectMessage.put("message", msg);
+                jsonObject.put("error", jsonObjectMessage);
 
                 System.out.println(msg);
+
                 return jsonObject.toString();
             }
         }

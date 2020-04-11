@@ -97,7 +97,7 @@ public class LinkService {
     }
 
     public Link findLatestByAddress(String address) {
-        return linkRepository.findFirstByUriOrderByDateAsc(address);
+        return linkRepository.findFirstByUriOrderByDateDesc(address);
     }
 
     public Link findByAddress(String address) {
