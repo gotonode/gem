@@ -162,7 +162,7 @@ public class LinkController {
 
         Link link = linkService.add(linkData);
 
-        System.out.println("Added a new entry: " + link);
+        System.out.println(link);
 
         return new JSONObject(link).toString();
     }
