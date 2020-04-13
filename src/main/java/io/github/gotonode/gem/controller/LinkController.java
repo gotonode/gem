@@ -15,13 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.chrono.ChronoLocalDate;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.Temporal;
-import java.time.temporal.TemporalField;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -114,7 +107,7 @@ public class LinkController {
 
             JSONObject jsonObject = new JSONObject();
             JSONObject jsonObjectMessage = new JSONObject();
-            jsonObjectMessage.put("code", Main.CODE_KEY_INCORRECT);
+            jsonObjectMessage.put("code", Main.CODE_ERROR_KEY_INCORRECT);
             jsonObjectMessage.put("message", msg);
             jsonObject.put("error", jsonObjectMessage);
 
@@ -129,7 +122,7 @@ public class LinkController {
 
             JSONObject jsonObject = new JSONObject();
             JSONObject jsonObjectMessage = new JSONObject();
-            jsonObjectMessage.put("code", Main.CODE_ADDRESS_EMPTY_OR_WHITESPACE_ONLY);
+            jsonObjectMessage.put("code", Main.CODE_ERROR_ADDRESS_EMPTY_OR_ONLY_WHITESPACE);
             jsonObjectMessage.put("message", msg);
             jsonObject.put("error", jsonObjectMessage);
 
@@ -157,9 +150,9 @@ public class LinkController {
 
                 JSONObject jsonObject = new JSONObject();
                 JSONObject jsonObjectMessage = new JSONObject();
-                jsonObjectMessage.put("code", Main.CODE_ALREADY_RECEIVED);
+                jsonObjectMessage.put("code", Main.CODE_MESSAGE_ALREADY_RECEIVED);
                 jsonObjectMessage.put("message", msg);
-                jsonObject.put("error", jsonObjectMessage);
+                jsonObject.put("message", jsonObjectMessage);
 
                 System.out.println(msg);
 
