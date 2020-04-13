@@ -111,7 +111,7 @@ public class LinkController {
             jsonObjectMessage.put("message", msg);
             jsonObject.put("error", jsonObjectMessage);
 
-            System.out.println(msg);
+            System.out.println(jsonObject);
 
             return jsonObject.toString();
         }
@@ -126,7 +126,7 @@ public class LinkController {
             jsonObjectMessage.put("message", msg);
             jsonObject.put("error", jsonObjectMessage);
 
-            System.out.println(msg);
+            System.out.println(jsonObject);
 
             return jsonObject.toString();
         }
@@ -154,7 +154,7 @@ public class LinkController {
                 jsonObjectMessage.put("message", msg);
                 jsonObject.put("message", jsonObjectMessage);
 
-                System.out.println(msg);
+                System.out.println(jsonObject);
 
                 return jsonObject.toString();
             }
