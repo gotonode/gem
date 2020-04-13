@@ -116,6 +116,21 @@ public class LinkController {
             return jsonObject.toString();
         }
 
+        if (linkData.getSite() == null) {
+            String msg = "Site was missing.";
+
+            JSONObject jsonObject = new JSONObject();
+            JSONObject jsonObjectMessage = new JSONObject();
+            jsonObjectMessage.put("code", Main.CODE_ERROR_ADDRESS_EMPTY_OR_ONLY_WHITESPACE);
+            jsonObjectMessage.put("message", msg);
+            jsonObject.put("error", jsonObjectMessage);
+
+            System.out.println(jsonObject);
+
+            return jsonObject.toString();
+        }
+
+
         if (linkData.getAddress() == null || linkData.getAddress().trim().isEmpty()) {
 
             String msg = "Address was empty or contained only whitespace characters.";

@@ -9,7 +9,7 @@ public class LinkData {
 
     private String key;
 
-    private int site;
+    private Integer site;
 
-    private int version;
+    private Integer version;
 }
