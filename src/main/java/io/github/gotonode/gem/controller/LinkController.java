@@ -95,9 +95,9 @@ public class LinkController {
 
     @PostMapping(value = "/add", produces = "application/json")
     @ResponseBody
-    public String add(@Valid @ModelAttribute LinkData linkData, BindingResult bindingResult) {
+    public String add(@Valid @ModelAttribute LinkData linkData) {
 
-        String key = linkData.getKey();
+        final String key = linkData.getKey();
 
         linkData.setKey("[HIDDEN]"); // For security, we hide this.
 
@@ -116,12 +116,6 @@ public class LinkController {
             System.out.println(jsonObject);
 
             return jsonObject.toString();
-        }
-
-        if (bindingResult.hasErrors()) {
-            JSONObject errorJson = new JSONObject(bindingResult.getAllErrors().get(0));
-            System.out.println(errorJson);
-            return errorJson.toString();
         }
 
         Link latestLink = linkService.findLatestByAddress(linkData.getAddress());
