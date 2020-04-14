@@ -8,6 +8,8 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -93,7 +95,7 @@ public class LinkController {
 
     @PostMapping(value = "/add", produces = "application/json")
     @ResponseBody
-    public String add(@Valid @ModelAttribute LinkData linkData) {
+    public String add(@Valid @ModelAttribute LinkData linkData, BindingResult bindingResult) {
 
         String key = linkData.getKey();
 
@@ -116,34 +118,10 @@ public class LinkController {
             return jsonObject.toString();
         }
 
-        if (linkData.getSite() == null) {
-            String msg = "Site was missing.";
-
-            JSONObject jsonObject = new JSONObject();
-            JSONObject jsonObjectMessage = new JSONObject();
-            jsonObjectMessage.put("code", Main.CODE_ERROR_ADDRESS_EMPTY_OR_ONLY_WHITESPACE);
-            jsonObjectMessage.put("message", msg);
-            jsonObject.put("error", jsonObjectMessage);
-
-            System.out.println(jsonObject);
-
-            return jsonObject.toString();
-        }
-
-
-        if (linkData.getAddress() == null || linkData.getAddress().trim().isEmpty()) {
-
-            String msg = "Address was empty or contained only whitespace characters.";
-
-            JSONObject jsonObject = new JSONObject();
-            JSONObject jsonObjectMessage = new JSONObject();
-            jsonObjectMessage.put("code", Main.CODE_ERROR_ADDRESS_EMPTY_OR_ONLY_WHITESPACE);
-            jsonObjectMessage.put("message", msg);
-            jsonObject.put("error", jsonObjectMessage);
-
-            System.out.println(jsonObject);
-
-            return jsonObject.toString();
+        if (bindingResult.hasErrors()) {
+            JSONObject errorJson = new JSONObject(bindingResult.getAllErrors().get(0));
+            System.out.println(errorJson);
+            return errorJson.toString();
         }
 
         Link latestLink = linkService.findLatestByAddress(linkData.getAddress());
