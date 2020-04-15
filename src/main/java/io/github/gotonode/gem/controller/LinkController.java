@@ -4,6 +4,7 @@ import io.github.gotonode.gem.domain.Link;
 import io.github.gotonode.gem.form.LinkData;
 import io.github.gotonode.gem.service.LinkService;
 import io.github.gotonode.gem.Main;
+import org.hibernate.validator.internal.constraintvalidators.hv.URLValidator;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.net.URL;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
@@ -112,6 +114,24 @@ public class LinkController {
             jsonObjectMessage.put("code", Main.CODE_ERROR_KEY_INCORRECT);
             jsonObjectMessage.put("message", msg);
             jsonObject.put("error", jsonObjectMessage);
+
+            System.out.println(jsonObject);
+
+            return jsonObject.toString();
+        }
+
+        try {
+            // TODO: Validate URL by regex?
+            new URL(linkData.getAddress()).toURI();
+        }
+        catch (Exception e) {
+            String msg = "URL is not valid.";
+
+            JSONObject jsonObject = new JSONObject();
+            JSONObject jsonObjectMessage = new JSONObject();
+            jsonObjectMessage.put("code", Main.CODE_MESSAGE_ALREADY_RECEIVED);
+            jsonObjectMessage.put("message", msg);
+            jsonObject.put("message", jsonObjectMessage);
 
             System.out.println(jsonObject);
 
