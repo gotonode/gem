@@ -62,6 +62,21 @@ public class LinkController {
         return "index";
     }
 
+    @GetMapping(value = "/stats", produces = "application/json")
+    @ResponseBody
+    public String stats() {
+
+        JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObjectMessage = new JSONObject();
+        jsonObjectMessage.put("new", linkService.getUnusedCount());
+        jsonObjectMessage.put("all", linkService.getCount());
+        jsonObject.put("stats", jsonObjectMessage);
+
+        System.out.println(jsonObject);
+
+        return jsonObject.toString();
+    }
+
     @GetMapping("/fetch")
     public void fetch(@RequestParam(required = false) String key, HttpServletResponse response) {
 
