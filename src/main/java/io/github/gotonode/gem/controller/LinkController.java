@@ -179,20 +179,24 @@ public class LinkController {
         return "done";
     }
 
-    @PostMapping("/toggle")
-    public String toggle(@RequestParam Long id) {
+    @PostMapping("/id/{id}/toggle")
+    public String toggle(@PathVariable String id) {
 
-        Link link = linkService.toggle(id);
+        Long idLong = Long.parseLong(id);
+
+        Link link = linkService.toggle(idLong);
 
         System.out.println("Toggled link: " + link);
 
         return "redirect:/";
     }
 
-    @PostMapping("/delete")
-    public String delete(@RequestParam Long id) {
+    @PostMapping("/id/{id}/delete")
+    public String delete(@PathVariable String id) {
 
-        Link link = linkService.delete(id);
+        Long idLong = Long.parseLong(id);
+
+        Link link = linkService.delete(idLong);
 
         System.out.println("Deleted link: " + link);
 
