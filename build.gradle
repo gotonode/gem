@@ -39,7 +39,7 @@ dependencies {
 
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.10'
 
-    compile 'org.json:json:20190722'
+    compile 'org.json:json:20200518'
 
     compileOnly 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
