@@ -41,7 +41,7 @@ dependencies {
 
     compile 'org.json:json:20190722'
 
-    compileOnly 'org.projectlombok:lombok:1.18.12'
+    compileOnly 'org.projectlombok:lombok:1.18.18'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
